@@ -1,0 +1,268 @@
+/* ==========================================================================
+   FORNO & FIAMMA - ANIMATIONS & KEYFRAMES
+   ========================================================================== */
+
+/* Keyframe Animations */
+@keyframes pulseDot {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+    box-shadow: 0 0 10px var(--accent-amber);
+  }
+
+  50% {
+    transform: scale(1.4);
+    opacity: 0.7;
+    box-shadow: 0 0 20px var(--accent-gold);
+  }
+}
+
+@keyframes pulseHotspot {
+
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(243, 168, 71, 0.7);
+  }
+
+  50% {
+    transform: scale(1.15);
+    box-shadow: 0 0 0 10px rgba(243, 168, 71, 0);
+  }
+}
+
+@keyframes scrollWheel {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  50% {
+    opacity: 0.3;
+    transform: translateY(8px);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+@keyframes floatElement {
+
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-8px) rotate(1deg);
+  }
+}
+
+@keyframes shimmerEffect {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes subtleEmberFloat {
+  0% {
+    transform: translateY(0) translateX(0) scale(0.8);
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 0.8;
+  }
+
+  80% {
+    opacity: 0.6;
+  }
+
+  100% {
+    transform: translateY(-120px) translateX(25px) scale(1.2);
+    opacity: 0;
+  }
+}
+
+@keyframes hearthGlowPulse {
+  0%, 100% {
+    opacity: 0.75;
+    transform: scale(1);
+    filter: blur(55px);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
+    filter: blur(65px);
+  }
+}
+
+@keyframes orangeLightBevel {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Scroll Reveal Classes (Driven by IntersectionObserver in JS) */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(35px);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-on-scroll.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-fade-left {
+  opacity: 0;
+  transform: translateX(-40px);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-fade-left.revealed {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.reveal-fade-right {
+  opacity: 0;
+  transform: translateX(40px);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-fade-right.revealed {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.reveal-scale-up {
+  opacity: 0;
+  transform: scale(0.92);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-scale-up.revealed {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Stagger Delays */
+.delay-1 {
+  transition-delay: 0.1s;
+}
+
+.delay-2 {
+  transition-delay: 0.2s;
+}
+
+.delay-3 {
+  transition-delay: 0.3s;
+}
+
+.delay-4 {
+  transition-delay: 0.4s;
+}
+
+.delay-5 {
+  transition-delay: 0.5s;
+}
+
+/* Subtle Floating Parallax on Hero Elements */
+.floating-badge {
+  animation: floatElement 6s ease-in-out infinite;
+}
+
+.floating-badge:nth-child(2) {
+  animation-delay: -3s;
+}
+
+/* Interactive Micro-Animations for Foundation & Reservations */
+@keyframes livePulseDot {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(255, 170, 60, 0.75), 0 0 8px rgba(255, 122, 0, 0.6);
+  }
+  60% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 8px rgba(255, 170, 60, 0), 0 0 14px rgba(255, 122, 0, 0.85);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(255, 170, 60, 0), 0 0 8px rgba(255, 122, 0, 0.6);
+  }
+}
+
+@keyframes iconPulseGlow {
+  0%, 100% {
+    transform: translateY(0);
+    box-shadow: 0 0 18px rgba(255, 122, 0, 0.35);
+  }
+  50% {
+    transform: translateY(-4px);
+    box-shadow: 0 0 30px rgba(255, 122, 0, 0.65), 0 0 10px rgba(255, 180, 50, 0.5);
+  }
+}
+
+@keyframes chipGlowPulse {
+  0%, 100% {
+    border-color: rgba(255, 140, 40, 0.3);
+  }
+  50% {
+    border-color: rgba(255, 160, 60, 0.7);
+    box-shadow: 0 0 15px rgba(255, 122, 0, 0.2);
+  }
+}
+
+.live-pulse {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background-color: #ffaa40;
+  border-radius: 50% !important;
+  flex-shrink: 0;
+  box-shadow: 0 0 8px rgba(255, 170, 60, 0.8);
+  animation: livePulseDot 2s infinite ease-in-out;
+  margin-right: 0.25rem;
+}
+
+.live-pulse i {
+  display: none;
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .reveal-on-scroll,
+  .reveal-fade-left,
+  .reveal-fade-right,
+  .reveal-scale-up {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

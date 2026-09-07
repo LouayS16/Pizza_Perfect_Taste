@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pizza Perfect Taste</title>
+  <meta name="description"
+    content="Explore the artisanal craftsmanship, ancestral ingredients, and sommelier pairings of Pizza Perfect Taste creations." />
+  <meta name="theme-color" content="#160f0b" />
+
+  <!-- Favicon / Navigator Window Tab Logo -->
+  <link rel="icon" type="image/svg+xml" href="Assets/images/favicon.svg" />
+  <link rel="icon" type="image/png" href="Assets/images/logo-perfect-taste.png" />
+  <link rel="apple-touch-icon" href="Assets/images/logo-perfect-taste.png" />
+
+  <!-- Preconnect Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700;1,800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" />
+
+  <!-- Font Awesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+</head>
+
+<body>
+
+  <!-- Reusable Navigation Bar Component Mount -->
+  <div id="navbar-mount" data-active="menu"></div>
+
+  <!-- ==========================================================================
+       PRODUCT DETAILS MASTER SECTION
+       ========================================================================== -->
+  <main class="product-page-main">
+    <!-- Breadcrumb Bar -->
+    <div class="product-breadcrumb-bar">
+      <div class="container">
+        <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+          <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+          <i class="fa-solid fa-chevron-right breadcrumb-separator"></i>
+          <a href="menu.html">Full Menu</a>
+          <i class="fa-solid fa-chevron-right breadcrumb-separator"></i>
+          <span id="breadcrumb-current-item" class="breadcrumb-current">Product Details</span>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Product Master Showcase -->
+    <section class="product-showcase-section">
+      <div class="container">
+        <div class="product-showcase-grid">
+
+          <!-- Left Column: Master Photography & Single Badge -->
+          <div class="product-gallery-col reveal-on-scroll">
+            <div class="product-master-image-wrap">
+              <img id="product-master-img" src="Assets/images/pizza-tartufo.jpg" alt="Dish Photography"
+                class="product-master-img" />
+              <div class="product-master-gradient-overlay"></div>
+
+              <!-- Single Floating Badge (No duplicates) -->
+              <span id="product-badge" class="card-badge">
+                <i id="product-badge-icon" class="fa-solid fa-crown"></i>
+                <span id="product-badge-text">Chef's Pick</span>
+              </span>
+
+              <!-- Floating Bottom Hearth Specs -->
+              <div class="product-master-specs-bar">
+                <div class="product-spec-item">
+                  <i class="fa-solid fa-temperature-arrow-up"></i>
+                  <span>850°F Hearth</span>
+                </div>
+                <div class="product-spec-item">
+                  <i class="fa-solid fa-wheat-awn"></i>
+                  <span>Caputo 00</span>
+                </div>
+                <div class="product-spec-item">
+                  <i class="fa-solid fa-stopwatch"></i>
+                  <span>90s Flash Bake</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Back to Menu Quick Link -->
+            <div class="product-back-link-wrap">
+              <a href="menu.html" class="product-back-link">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span>Explore Entire Artisanal Menu</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Right Column: Gastronomy, Sensory Profile & Customizer -->
+          <div class="product-details-col reveal-on-scroll delay-1">
+            <div class="product-meta-header">
+              <span id="product-category" class="product-category-tag">SIGNATURE PIZZA NAPOLETANA</span>
+              <h1 id="product-title" class="product-hero-title">Tartufo Reale and Burrata</h1>
+
+              <!-- Price Display with Prominent Dollar Sign -->
+              <div class="product-price-display">
+                <span class="product-price-cur">$</span>
+                <span id="product-price-val" class="product-price-val">28.50</span>
+                <span class="product-tax-note">Includes Artisan Hospitality & Vat</span>
+              </div>
+            </div>
+
+            <!-- Narrative Description -->
+            <p id="product-description" class="product-narrative-text">
+              Umbrian black truffle shavings, creamy Pugliese burrata, Fior di Latte, aged parmigiano and cold-pressed
+              white truffle oil. Baked over oak wood embers at 850°F for ancestral airiness and leopard-spotted
+              crispness.
+            </p>
+
+            <!-- Visual Ingredients & Craft Highlights Chips -->
+            <div class="product-chips-section">
+              <h4 class="product-chips-heading">Artisanal Flavor Highlights</h4>
+              <div id="product-chips-container" class="product-chips-matrix">
+                <!-- Injected dynamically by JS -->
+              </div>
+            </div>
+
+            <!-- Sensory Flavor Balance Progress Profile -->
+            <div class="product-sensory-profile">
+              <h4 class="product-chips-heading">Sensory Gastronomic Profile</h4>
+              <div class="product-profile-bars">
+                <div class="product-bar-row">
+                  <div class="product-bar-label">
+                    <span>Crust Crunch & Airiness</span>
+                    <span>96%</span>
+                  </div>
+                  <div class="product-progress-track">
+                    <div class="product-progress-fill" style="width: 96%;"></div>
+                  </div>
+                </div>
+                <div class="product-bar-row">
+                  <div class="product-bar-label">
+                    <span>Aroma & Truffle Intensity</span>
+                    <span>98%</span>
+                  </div>
+                  <div class="product-progress-track">
+                    <div class="product-progress-fill" style="width: 98%;"></div>
+                  </div>
+                </div>
+                <div class="product-bar-row">
+                  <div class="product-bar-label">
+                    <span>Creamy Palate Balance</span>
+                    <span>94%</span>
+                  </div>
+                  <div class="product-progress-track">
+                    <div class="product-progress-fill" style="width: 94%;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sommelier Drink Pairing Box -->
+            <div class="product-pairing-box">
+              <div class="pairing-icon-box">
+                <i class="fa-solid fa-wine-glass"></i>
+              </div>
+              <div class="pairing-content">
+                <strong>Sommelier Pairing Note</strong>
+                <p id="product-pairing-text">Pair with Chianti Classico DOCG Riserva or our Blood Orange & Amaro Spritz.
+                </p>
+              </div>
+            </div>
+
+            <!-- Action & Ordering Box -->
+            <div class="product-action-box">
+              <div class="product-qty-selector">
+                <button type="button" class="qty-btn" id="qty-decrement" aria-label="Decrease quantity">
+                  <i class="fa-solid fa-minus"></i>
+                </button>
+                <span class="qty-value" id="qty-display">1</span>
+                <button type="button" class="qty-btn" id="qty-increment" aria-label="Increase quantity">
+                  <i class="fa-solid fa-plus"></i>
+                </button>
+              </div>
+
+              <button type="button" class="btn-product-add" id="product-add-to-cart-btn">
+                <i class="fa-solid fa-bag-shopping"></i>
+                <span id="product-add-btn-text">ADD TO ORDER • $28.50</span>
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Atmospheric Glowing Section Divider -->
+    <div class="section-glow-divider" aria-hidden="true"></div>
+
+    <!-- ==========================================================================
+         RELATED CREATIONS / YOU MAY ALSO SAVOR
+         ========================================================================== -->
+    <section class="related-products-section">
+      <div class="container">
+        <!-- New Architectural Header for Suggestions -->
+        <div class="suggestion-header-block reveal-on-scroll">
+          <div class="suggestion-kicker">
+            <span class="suggestion-kicker-dot"></span>
+            <i class="fa-solid fa-sparkles"></i>
+            <span>CHEF'S CURATED PAIRINGS</span>
+            <i class="fa-solid fa-sparkles"></i>
+            <span class="suggestion-kicker-dot"></span>
+          </div>
+
+          <h2 class="suggestion-title">
+            You May Also <span class="suggestion-title-gradient">Savor & Indulge</span>
+          </h2>
+
+          <div class="suggestion-subtitle-wrap">
+            <span class="suggestion-wing-line left" aria-hidden="true"></span>
+            <p class="suggestion-subtitle">
+              Harmonious Neapolitan creations hand-picked by our Master Pizzaiolo to elevate your tasting journey.
+            </p>
+            <span class="suggestion-wing-line right" aria-hidden="true"></span>
+          </div>
+
+          <div class="suggestion-mood-pills">
+            <span class="suggestion-mood-pill active"><i class="fa-solid fa-wine-glass"></i> Sommelier Match</span>
+            <span class="suggestion-mood-pill"><i class="fa-solid fa-pizza-slice"></i> Hearth Companion</span>
+            <span class="suggestion-mood-pill"><i class="fa-solid fa-cookie-bite"></i> Dolce Finish</span>
+          </div>
+        </div>
+
+        <div class="menu-grid" id="related-products-grid" style="margin-top: 3.5rem;">
+          <!-- Injected dynamically by product-detail.js -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Atmospheric Glowing Section Divider -->
+  <div class="section-glow-divider" aria-hidden="true"></div>
+
+  <!-- ==========================================================================
+       FOOTER
+       ========================================================================== -->
+  <footer class="luxury-footer" id="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <!-- Brand Column -->
+        <div class="footer-brand">
+          <a href="index.html" class="brand-logo" aria-label="Pizza Perfect Taste Home">
+            <img src="Assets/images/logo-perfect-taste.png" alt="Pizza Perfect Taste Logo"
+              class="footer-brand-logo-img" />
+          </a>
+          <p>
+            An ode to ancestral Neapolitan wood-fired artistry, pairing 48-hour cold fermented Biga dough with exquisite
+            Italian culinary heritage.
+          </p>
+          <div class="footer-social-links">
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="social-btn"
+              aria-label="Instagram">
+              <i class="fa-brands fa-instagram"></i>
+            </a>
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="social-btn"
+              aria-label="Facebook">
+              <i class="fa-brands fa-facebook-f"></i>
+            </a>
+            <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" class="social-btn"
+              aria-label="TikTok">
+              <i class="fa-brands fa-tiktok"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div>
+          <h4 class="footer-heading">Navigation</h4>
+          <ul class="footer-nav-list">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">Our Story</a></li>
+            <li><a href="menu.html">Full Menu</a></li>
+            <li><a href="offers.html">Special</a></li>
+          </ul>
+        </div>
+
+        <!-- Gastronomy and Dietary -->
+        <div>
+          <h4 class="footer-heading">Gastronomy</h4>
+          <ul class="footer-nav-list">
+            <li><a href="#">Biga Fermentation</a></li>
+            <li><a href="#">San Marzano D.O.P.</a></li>
+            <li><a href="#">Gluten-Sensitive Crust</a></li>
+            <li><a href="#">Sommelier Wine List</a></li>
+          </ul>
+        </div>
+
+        <!-- Privilege Club -->
+        <div>
+          <h4 class="footer-heading">Privilege Club</h4>
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.8rem;">
+            Receive invitations to seasonal truffle tastings and secret sommelier pairings.
+          </p>
+          <form id="newsletter-form" class="newsletter-form">
+            <input type="email" class="newsletter-input" placeholder="Your email..." required />
+            <button type="submit" class="btn btn-primary btn-sm" style="padding: 0.75rem 1.2rem;">JOIN</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Legal and Copyright -->
+      <div class="footer-bottom">
+        <span>© 2026 PIZZA PERFECT TASTE HAUTE PIZZERIA NAPOLETANA. ALL RIGHTS RESERVED.</span>
+        <div class="footer-legal-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Hospitality</a>
+          <a href="#">Accessibility</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       CART SLIDE-OVER DRAWER and NOTIFICATION SYSTEM
+       ========================================================================== -->
+  <div class="cart-drawer-overlay" id="cart-overlay"></div>
+  <aside class="cart-drawer" id="cart-drawer" aria-label="Shopping Cart">
+    <div class="cart-header">
+      <h3>Your Artisanal Order</h3>
+      <button class="cart-close-btn" id="cart-close-btn" aria-label="Close Cart"><i
+          class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="cart-items-body" id="cart-items-body">
+      <!-- Injected by menu-data.js -->
+    </div>
+    <div class="cart-footer">
+      <div class="cart-total-row">
+        <span>Subtotal</span>
+        <span id="cart-subtotal">$0.00</span>
+      </div>
+      <button class="btn btn-primary" id="cart-checkout-btn" style="width: 100%;">
+        <span>PROCEED TO CHECKOUT</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Floating Back to Top Button -->
+  <button class="btn-back-to-top" id="btn-back-to-top" aria-label="Back to Top" title="Back to Top">
+    <i class="fa-solid fa-arrow-up"></i>
+  </button>
+
+  <!-- Live Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- VIP Member Login Modal -->
+  <div class="modal-backdrop" id="login-modal-backdrop" aria-hidden="true"></div>
+  <div class="luxury-modal" id="login-modal" role="dialog" aria-modal="true" aria-labelledby="login-modal-title"
+    aria-hidden="true">
+    <button class="modal-close-btn" id="login-modal-close" aria-label="Close Login Modal">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div style="text-align: center;">
+      <div class="modal-header-badge">
+        <i class="fa-solid fa-crown"></i>
+        <span>Privilege Club</span>
+      </div>
+      <h3 class="modal-title" id="login-modal-title">VIP Access</h3>
+      <p class="modal-subtitle">Sign in to unlock private tastings and chef tables</p>
+    </div>
+    <form class="modal-form" id="vip-login-form">
+      <div class="modal-input-group">
+        <label class="modal-input-label" for="login-email">Email or Membership ID</label>
+        <div class="modal-input-wrap">
+          <input type="text" class="modal-input" id="login-email" placeholder="vip@perfecttaste.com" required
+            autocomplete="username" />
+          <i class="fa-solid fa-envelope modal-input-icon"></i>
+        </div>
+      </div>
+      <div class="modal-input-group">
+        <label class="modal-input-label" for="login-password">Password</label>
+        <div class="modal-input-wrap">
+          <input type="password" class="modal-input" id="login-password" placeholder="••••••••••••" required
+            autocomplete="current-password" />
+          <i class="fa-solid fa-lock modal-input-icon"></i>
+          <button type="button" class="modal-pw-toggle" id="login-pw-toggle" aria-label="Toggle password visibility">
+            <i class="fa-solid fa-eye" id="login-pw-icon"></i>
+          </button>
+        </div>
+      </div>
+      <div class="modal-options-row">
+        <label class="modal-remember-wrap">
+          <input type="checkbox" id="login-remember" checked />
+          <span>Remember me</span>
+        </label>
+        <a href="#" class="modal-forgot-link" id="login-forgot-link">Forgot password?</a>
+      </div>
+      <button type="submit" class="btn-modal-submit">
+        <span>ENTER PRIVILEGE CLUB</span>
+        <i class="fa-solid fa-arrow-right"></i>
+      </button>
+    </form>
+    <div class="modal-footer-note">
+      <span>Not a member yet?</span>
+      <a href="index.html#newsletter-section" id="login-join-link">Join Privilege Club</a>
+    </div>
+  </div>
+
+  <!-- Components & Scripts -->
+  <script src="js/components/navbar.js"></script>
+  <script src="js/components/hero.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/menu-data.js"></script>
+  <script src="js/product-detail.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/main.js"></script>
+</body>
+
+</html>
