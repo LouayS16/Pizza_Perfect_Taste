@@ -299,10 +299,64 @@
     }
   ];
 
-  const CART_STORAGE_KEY = 'forno_fiamma_cart_v2';
+  // Special curated tasting offers lookup
+  const SPECIAL_OFFERS = [
+    {
+      id: 'offer-banchetto',
+      title: 'Il Banchetto Reale (Feast for 2)',
+      price: 78.00,
+      image: 'Assets/images/offer-feast.jpg'
+    },
+    {
+      id: 'offer-aperitivo',
+      title: 'Daily Aperitivo & Slices',
+      price: 24.00,
+      image: 'Assets/images/cocktail-spritz.jpg'
+    },
+    {
+      id: 'offer-diavola',
+      title: 'Diavola & Birra DOC Pairing',
+      price: 26.50,
+      image: 'Assets/images/pizza-diavola.jpg'
+    }
+  ];
+
+  const ALL_ITEMS = [...MENU_ITEMS, ...SPECIAL_OFFERS];
+
+  const CART_STORAGE_KEY = 'forno_fiamma_cart_v3';
 
   // Page detection
   const isMenuPage = window.location.pathname.toLowerCase().includes('menu.html') || !!document.getElementById('menu-search-input');
+
+  function loadCart() {
+    try {
+      const saved = localStorage.getItem(CART_STORAGE_KEY) || localStorage.getItem('forno_fiamma_cart_v2') || localStorage.getItem('forno_cart');
+      if (!saved) return [];
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed)) {
+        return parsed
+          .filter(item => item && (item.id || item.title))
+          .map(item => ({
+            id: item.id || 'item-' + Math.random().toString(36).substr(2, 9),
+            title: item.title || 'Artisanal Dish',
+            price: typeof item.price === 'number' && !isNaN(item.price) ? item.price : (parseFloat(item.price) || 0),
+            image: item.image || 'Assets/images/pizza-margherita.jpg',
+            quantity: Math.max(1, parseInt(item.quantity, 10) || 1)
+          }));
+      }
+      return [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function saveCart() {
+    try {
+      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+    } catch (e) {
+      // Storage unavailable or quota exceeded
+    }
+  }
 
   // Cart & Filter State
   let cart = loadCart();
@@ -322,23 +376,6 @@
   const cartSubtotalEl = document.getElementById('cart-subtotal');
   const cartTriggerBtn = document.getElementById('cart-trigger-btn');
   const checkoutBtn = document.getElementById('cart-checkout-btn');
-
-  function loadCart() {
-    try {
-      const saved = localStorage.getItem(CART_STORAGE_KEY);
-      return saved ? JSON.parse(saved) : [];
-    } catch (e) {
-      return [];
-    }
-  }
-
-  function saveCart() {
-    try {
-      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
-    } catch (e) {
-      // Storage unavailable or quota exceeded
-    }
-  }
 
   const ITEMS_PER_PAGE = 8;
   let currentPage = 1;
@@ -744,18 +781,33 @@
   }
 
   /**
-   * Cart Management
+   * Cart Management & Mathematical Calculations
    */
-  function addToCart(itemId, qty = 1) {
-    const quantityToAdd = Math.max(1, parseInt(qty, 10) || 1);
-    const item = MENU_ITEMS.find(i => i.id === itemId);
+  function addToCart(itemOrId, qty = 1) {
+    let item = null;
+    let quantityToAdd = 1;
+
+    if (typeof itemOrId === 'object' && itemOrId !== null) {
+      item = itemOrId;
+      quantityToAdd = Math.max(1, parseInt(item.quantity || qty, 10) || 1);
+    } else {
+      quantityToAdd = Math.max(1, parseInt(qty, 10) || 1);
+      item = ALL_ITEMS.find(i => i.id === itemOrId);
+    }
+
     if (!item) return;
 
-    const existing = cart.find(i => i.id === itemId);
+    const existing = cart.find(i => i.id === item.id);
     if (existing) {
-      existing.quantity += quantityToAdd;
+      existing.quantity = (parseInt(existing.quantity, 10) || 0) + quantityToAdd;
     } else {
-      cart.push({ ...item, quantity: quantityToAdd });
+      cart.push({
+        id: item.id,
+        title: item.title,
+        price: parseFloat(item.price) || 0,
+        image: item.image || 'Assets/images/pizza-margherita.jpg',
+        quantity: quantityToAdd
+      });
     }
 
     saveCart();
@@ -792,8 +844,8 @@
   }
 
   function updateCartUI() {
-    const totalCount = cart.reduce((acc, item) => acc + item.quantity, 0);
-    const subtotal = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    const totalCount = cart.reduce((acc, item) => acc + (parseInt(item.quantity, 10) || 0), 0);
+    const subtotal = cart.reduce((acc, item) => acc + ((parseFloat(item.price) || 0) * (parseInt(item.quantity, 10) || 0)), 0);
 
     // Dynamic badge resolution: Only show when count > 0, completely hide when 0
     const badges = document.querySelectorAll('#cart-badge, .cart-count-badge, #mobile-drawer-cart-badge, .mobile-cart-badge');
@@ -825,14 +877,16 @@
       `;
     } else {
       itemsContainer.innerHTML = cart.map(item => {
-        const lineTotal = (item.price * item.quantity).toFixed(2);
+        const itemQty = parseInt(item.quantity, 10) || 1;
+        const itemPrice = parseFloat(item.price) || 0;
+        const lineTotal = (itemPrice * itemQty).toFixed(2);
         return `
           <div class="cart-item-row" data-cart-item-id="${item.id}">
             <img src="${item.image}" alt="${item.title}" class="cart-item-img" />
             <div class="cart-item-info">
               <h5>${item.title}</h5>
               <div class="cart-item-pricing-line">
-                <span class="cart-item-unit-price">$${item.price.toFixed(2)} ea</span>
+                <span class="cart-item-unit-price">$${itemPrice.toFixed(2)} ea</span>
                 <span class="cart-item-total-price">$${lineTotal}</span>
               </div>
               <div class="cart-item-bottom-row">
@@ -840,7 +894,7 @@
                   <button class="cart-qty-btn cart-qty-minus" data-qty-dec="${item.id}" aria-label="Decrease quantity for ${item.title}">
                     <i class="fa-solid fa-minus"></i>
                   </button>
-                  <span class="cart-qty-num">${item.quantity}</span>
+                  <span class="cart-qty-num">${itemQty}</span>
                   <button class="cart-qty-btn cart-qty-plus" data-qty-inc="${item.id}" aria-label="Increase quantity for ${item.title}">
                     <i class="fa-solid fa-plus"></i>
                   </button>
@@ -853,35 +907,6 @@
           </div>
         `;
       }).join('');
-
-      // Attach quantity stepper events
-      itemsContainer.querySelectorAll('[data-qty-dec]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const id = btn.getAttribute('data-qty-dec');
-          const item = cart.find(i => i.id === id);
-          if (item) {
-            updateCartQuantity(id, item.quantity - 1);
-          }
-        });
-      });
-
-      itemsContainer.querySelectorAll('[data-qty-inc]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const id = btn.getAttribute('data-qty-inc');
-          const item = cart.find(i => i.id === id);
-          if (item) {
-            updateCartQuantity(id, item.quantity + 1);
-          }
-        });
-      });
-
-      // Attach remove button events
-      itemsContainer.querySelectorAll('.cart-item-remove').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const id = btn.getAttribute('data-remove');
-          removeFromCart(id);
-        });
-      });
     }
   }
 
@@ -919,6 +944,51 @@
       }
     });
 
+    // Delegated Stepper & Item Actions
+    document.addEventListener('click', (e) => {
+      // Stepper Decrement
+      const decBtn = e.target.closest('[data-qty-dec]');
+      if (decBtn) {
+        e.preventDefault();
+        const id = decBtn.getAttribute('data-qty-dec');
+        const item = cart.find(i => i.id === id);
+        if (item) {
+          updateCartQuantity(id, item.quantity - 1);
+        }
+        return;
+      }
+
+      // Stepper Increment
+      const incBtn = e.target.closest('[data-qty-inc]');
+      if (incBtn) {
+        e.preventDefault();
+        const id = incBtn.getAttribute('data-qty-inc');
+        const item = cart.find(i => i.id === id);
+        if (item) {
+          updateCartQuantity(id, item.quantity + 1);
+        }
+        return;
+      }
+
+      // Remove Item
+      const removeBtn = e.target.closest('[data-remove]');
+      if (removeBtn) {
+        e.preventDefault();
+        const id = removeBtn.getAttribute('data-remove');
+        removeFromCart(id);
+        return;
+      }
+
+      // Direct Add Button (e.g. Signature section, Tasting Packages)
+      const directAddBtn = e.target.closest('[data-direct-add]');
+      if (directAddBtn) {
+        e.preventDefault();
+        const id = directAddBtn.getAttribute('data-direct-add');
+        addToCart(id);
+        return;
+      }
+    });
+
     const checkoutBtn = document.getElementById('cart-checkout-btn');
     if (checkoutBtn) {
       checkoutBtn.addEventListener('click', () => {
@@ -937,14 +1007,6 @@
         updateCartUI();
       });
     }
-
-    // Direct add signature pizza buttons
-    document.querySelectorAll('[data-direct-add]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const id = btn.getAttribute('data-direct-add');
-        addToCart(id);
-      });
-    });
   }
 
   // Init
