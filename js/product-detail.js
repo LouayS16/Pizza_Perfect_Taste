@@ -36,7 +36,7 @@
     }
 
     // 3. Update Document Title
-    document.title = `${product.title} | Pizza Perfect Taste`;
+    document.title = 'Pizza Perfect Taste';
 
     // 4. Update Breadcrumb
     const breadcrumbEl = document.getElementById('breadcrumb-current-item');

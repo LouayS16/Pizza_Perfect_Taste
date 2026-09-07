@@ -746,23 +746,42 @@
   /**
    * Cart Management
    */
-  function addToCart(itemId) {
+  function addToCart(itemId, qty = 1) {
+    const quantityToAdd = Math.max(1, parseInt(qty, 10) || 1);
     const item = MENU_ITEMS.find(i => i.id === itemId);
     if (!item) return;
 
     const existing = cart.find(i => i.id === itemId);
     if (existing) {
-      existing.quantity += 1;
+      existing.quantity += quantityToAdd;
     } else {
-      cart.push({ ...item, quantity: 1 });
+      cart.push({ ...item, quantity: quantityToAdd });
     }
 
     saveCart();
     updateCartUI();
 
-    // Show feedback toast
+    // Show feedback toast with accurate quantity feedback
     if (window.showToast) {
-      window.showToast('Added to Order');
+      const msg = quantityToAdd > 1 
+        ? `${quantityToAdd} × ${item.title} Added to Order`
+        : `${item.title} Added to Order`;
+      window.showToast(msg, 'fa-solid fa-bag-shopping');
+    }
+  }
+
+  function updateCartQuantity(itemId, newQty) {
+    const qty = parseInt(newQty, 10);
+    if (isNaN(qty) || qty <= 0) {
+      removeFromCart(itemId);
+      return;
+    }
+
+    const existing = cart.find(i => i.id === itemId);
+    if (existing) {
+      existing.quantity = Math.min(99, qty);
+      saveCart();
+      updateCartUI();
     }
   }
 
@@ -777,7 +796,7 @@
     const subtotal = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
     // Dynamic badge resolution: Only show when count > 0, completely hide when 0
-    const badges = document.querySelectorAll('#cart-badge, .cart-count-badge');
+    const badges = document.querySelectorAll('#cart-badge, .cart-count-badge, #mobile-drawer-cart-badge, .mobile-cart-badge');
     badges.forEach(badge => {
       if (totalCount > 0) {
         badge.textContent = totalCount;
@@ -805,19 +824,58 @@
         </div>
       `;
     } else {
-      itemsContainer.innerHTML = cart.map(item => `
-        <div class="cart-item-row">
-          <img src="${item.image}" alt="${item.title}" class="cart-item-img" />
-          <div class="cart-item-info">
-            <h5>${item.title}</h5>
-            <span>${item.quantity} × $${item.price.toFixed(2)}</span>
+      itemsContainer.innerHTML = cart.map(item => {
+        const lineTotal = (item.price * item.quantity).toFixed(2);
+        return `
+          <div class="cart-item-row" data-cart-item-id="${item.id}">
+            <img src="${item.image}" alt="${item.title}" class="cart-item-img" />
+            <div class="cart-item-info">
+              <h5>${item.title}</h5>
+              <div class="cart-item-pricing-line">
+                <span class="cart-item-unit-price">$${item.price.toFixed(2)} ea</span>
+                <span class="cart-item-total-price">$${lineTotal}</span>
+              </div>
+              <div class="cart-item-bottom-row">
+                <div class="cart-item-qty-stepper">
+                  <button class="cart-qty-btn cart-qty-minus" data-qty-dec="${item.id}" aria-label="Decrease quantity for ${item.title}">
+                    <i class="fa-solid fa-minus"></i>
+                  </button>
+                  <span class="cart-qty-num">${item.quantity}</span>
+                  <button class="cart-qty-btn cart-qty-plus" data-qty-inc="${item.id}" aria-label="Increase quantity for ${item.title}">
+                    <i class="fa-solid fa-plus"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <button class="cart-item-remove" data-remove="${item.id}" aria-label="Remove ${item.title} from order" title="Remove Item">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
           </div>
-          <button class="cart-item-remove" data-remove="${item.id}" aria-label="Remove ${item.title}">
-            <i class="fa-solid fa-trash-can"></i>
-          </button>
-        </div>
-      `).join('');
+        `;
+      }).join('');
 
+      // Attach quantity stepper events
+      itemsContainer.querySelectorAll('[data-qty-dec]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-qty-dec');
+          const item = cart.find(i => i.id === id);
+          if (item) {
+            updateCartQuantity(id, item.quantity - 1);
+          }
+        });
+      });
+
+      itemsContainer.querySelectorAll('[data-qty-inc]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-qty-inc');
+          const item = cart.find(i => i.id === id);
+          if (item) {
+            updateCartQuantity(id, item.quantity + 1);
+          }
+        });
+      });
+
+      // Attach remove button events
       itemsContainer.querySelectorAll('.cart-item-remove').forEach(btn => {
         btn.addEventListener('click', () => {
           const id = btn.getAttribute('data-remove');
@@ -900,6 +958,8 @@
   // Expose global helpers and data
   window.MENU_ITEMS = MENU_ITEMS;
   window.addItemToCart = addToCart;
+  window.updateCartQuantity = updateCartQuantity;
+  window.removeFromCart = removeFromCart;
   window.updateCartUI = updateCartUI;
   window.toggleCartDrawer = toggleCartDrawer;
   window.getChipIcon = getChipIcon;
