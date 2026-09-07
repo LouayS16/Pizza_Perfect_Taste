@@ -65,8 +65,8 @@
 
       const mobileLinksHtml = this.options.links.map(link => {
         const isActive = link.id === activeId || (activeId === 'home' && (link.id === 'home' || link.href === 'index.html'));
-        return `<a href="${link.href}" class="mobile-nav-link ${isActive ? 'active' : ''}" data-nav-id="${link.id}"><i class="${link.icon}"></i> ${link.label}</a>`;
-      }).join('\n      ');
+        return `<a href="${link.href}" class="mobile-nav-link ${isActive ? 'active' : ''}" data-nav-id="${link.id}"><i class="${link.icon}"></i> <span>${link.label}</span></a>`;
+      }).join('\n              ');
 
       return `
         <header class="luxury-navbar" id="main-navbar" aria-label="Main Website Navigation">
@@ -98,7 +98,7 @@
                 </a>
               ` : ''}
 
-              <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle Mobile Navigation Menu">
+              <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle Mobile Navigation Menu" aria-expanded="false" aria-controls="mobile-drawer">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -107,7 +107,42 @@
           </div>
         </header>
 
-        
+        <!-- Mobile Navigation Backdrop Overlay -->
+        <div class="mobile-nav-overlay" id="mobile-nav-overlay" aria-hidden="true"></div>
+
+        <!-- Luxury Mobile Navigation Side Drawer -->
+        <aside class="mobile-nav-drawer" id="mobile-drawer" aria-label="Mobile Navigation Sidebar" aria-hidden="true">
+          <div class="mobile-drawer-header">
+            <a href="${this.options.brandHref}" class="mobile-drawer-brand" aria-label="Pizza Perfect Taste Home">
+              <img src="${this.options.brandLogo}" alt="${this.options.brandAlt}" class="mobile-drawer-logo" />
+            </a>
+            <button class="mobile-nav-close" id="mobile-nav-close" aria-label="Close navigation sidebar" title="Close Menu">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+
+          <div class="mobile-drawer-body">
+            <nav class="mobile-nav-links" aria-label="Mobile Navigation Links">
+              ${mobileLinksHtml}
+            </nav>
+          </div>
+
+          <div class="mobile-drawer-footer">
+            ${this.options.showCart ? `
+              <button class="mobile-action-btn mobile-cart-btn" id="mobile-drawer-cart-btn" aria-label="View Order Cart">
+                <i class="fa-solid fa-bag-shopping"></i>
+                <span>View Orders</span>
+                <span class="cart-count-badge mobile-cart-badge" id="mobile-drawer-cart-badge" style="display: none;"></span>
+              </button>
+            ` : ''}
+            ${this.options.showLogin ? `
+              <button class="mobile-action-btn mobile-login-btn" id="mobile-drawer-login-btn" aria-label="VIP Sign In">
+                <i class="fa-solid fa-crown"></i>
+                <span>VIP Member Sign In</span>
+              </button>
+            ` : ''}
+          </div>
+        </aside>
       `;
     }
 
@@ -136,34 +171,102 @@
       const overlay = this.overlayElement || document.getElementById('mobile-nav-overlay');
       const closeBtn = document.getElementById('mobile-nav-close');
       const mobileLinks = document.querySelectorAll('.mobile-nav-link');
+      const mobileCartBtn = document.getElementById('mobile-drawer-cart-btn');
+      const mobileLoginBtn = document.getElementById('mobile-drawer-login-btn');
 
       const toggleDrawer = (open) => {
         const nextState = typeof open === 'boolean' ? open : !this.isOpen;
         this.isOpen = nextState;
 
-        if (hamburger) hamburger.classList.toggle('active', this.isOpen);
-        if (drawer) drawer.classList.toggle('open', this.isOpen);
-        if (overlay) overlay.classList.toggle('active', this.isOpen);
+        if (hamburger) {
+          hamburger.classList.toggle('active', this.isOpen);
+          hamburger.setAttribute('aria-expanded', String(this.isOpen));
+        }
+        if (drawer) {
+          drawer.classList.toggle('open', this.isOpen);
+          drawer.setAttribute('aria-hidden', String(!this.isOpen));
+        }
+        if (overlay) {
+          overlay.classList.toggle('active', this.isOpen);
+          overlay.setAttribute('aria-hidden', String(!this.isOpen));
+        }
         document.body.style.overflow = this.isOpen ? 'hidden' : '';
       };
 
+      // Expose globally
+      window.toggleMobileNav = toggleDrawer;
+
+      // 1. Hamburger button toggle
       if (hamburger) {
-        hamburger.addEventListener('click', () => toggleDrawer());
+        hamburger.addEventListener('click', (e) => {
+          e.preventDefault();
+          toggleDrawer();
+        });
       }
 
+      // 2. Close 'X' button inside drawer
       if (closeBtn) {
-        closeBtn.addEventListener('click', () => toggleDrawer(false));
+        closeBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          toggleDrawer(false);
+        });
       }
 
+      // 3. Overlay backdrop click to close
       if (overlay) {
-        overlay.addEventListener('click', () => toggleDrawer(false));
+        overlay.addEventListener('click', (e) => {
+          e.preventDefault();
+          toggleDrawer(false);
+        });
       }
 
+      // 4. Mobile links click to close drawer
       mobileLinks.forEach(link => {
-        link.addEventListener('click', () => toggleDrawer(false));
+        link.addEventListener('click', () => {
+          toggleDrawer(false);
+        });
       });
 
-      // Attach View Orders / Cart Trigger Button listener
+      // 5. Drawer cart button
+      if (mobileCartBtn) {
+        mobileCartBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          toggleDrawer(false);
+          if (window.toggleCartDrawer) {
+            window.toggleCartDrawer(true);
+          }
+        });
+      }
+
+      // 6. Drawer login button
+      if (mobileLoginBtn) {
+        mobileLoginBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          toggleDrawer(false);
+          if (window.openLoginModal) {
+            window.openLoginModal();
+          } else {
+            const loginBtn = document.getElementById('nav-login-btn');
+            if (loginBtn) loginBtn.click();
+          }
+        });
+      }
+
+      // 7. Keyboard Escape key to close drawer
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && this.isOpen) {
+          toggleDrawer(false);
+        }
+      });
+
+      // 8. Auto-close drawer if screen is resized to desktop width
+      window.addEventListener('resize', () => {
+        if (window.innerWidth > 1024 && this.isOpen) {
+          toggleDrawer(false);
+        }
+      });
+
+      // 9. Attach View Orders / Cart Trigger Button listener
       const cartBtn = document.getElementById('cart-trigger-btn') || document.querySelector('.nav-cart-btn');
       if (cartBtn) {
         cartBtn.addEventListener('click', (e) => {
@@ -174,7 +277,7 @@
         });
       }
 
-      // Synchronize Cart Badge with menu-data.js if available
+      // 10. Synchronize Cart Badge with menu-data.js if available
       if (window.updateCartUI) {
         window.updateCartUI();
       }

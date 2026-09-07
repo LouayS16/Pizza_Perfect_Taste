@@ -228,11 +228,17 @@
       document.body.style.overflow = '';
     }
 
-    loginBtns.forEach(btn => {
-      btn.addEventListener('click', (e) => {
+    // Expose login modal controllers globally
+    window.openLoginModal = openLoginModal;
+    window.closeLoginModal = closeLoginModal;
+
+    // Delegated click listener for all login buttons
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('.nav-login-btn, #nav-login-btn, .mobile-login-btn, #mobile-drawer-login-btn, [data-open-login]');
+      if (btn) {
         e.preventDefault();
         openLoginModal();
-      });
+      }
     });
 
     if (loginCloseBtn) {
