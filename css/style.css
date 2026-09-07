@@ -4142,7 +4142,7 @@ ol {
 /* About Us Page Hero with about_us_hero.jpeg */
 .about-page-hero,
 .menu-page-hero.about-page-hero {
-  background-image: 
+  background-image:
     linear-gradient(180deg, rgba(16, 9, 6, 0.68) 0%, rgba(22, 13, 9, 0.82) 55%, var(--bg-deep) 100%),
     radial-gradient(circle at 50% 30%, rgba(255, 110, 0, 0.18) 0%, transparent 65%),
     url('../Assets/images/about_us_hero.jpeg');
@@ -4154,7 +4154,7 @@ ol {
 /* Menu Page Hero with menu_hero.jpeg */
 .menu-page-hero-bg,
 .menu-page-hero.menu-page-hero-bg {
-  background-image: 
+  background-image:
     linear-gradient(180deg, rgba(16, 9, 6, 0.68) 0%, rgba(22, 13, 9, 0.82) 55%, var(--bg-deep) 100%),
     radial-gradient(circle at 50% 30%, rgba(255, 110, 0, 0.18) 0%, transparent 65%),
     url('../Assets/images/menu_hero.jpeg');
@@ -4168,7 +4168,7 @@ ol {
 .special-page-hero,
 .menu-page-hero.offers-page-hero,
 .menu-page-hero.special-page-hero {
-  background-image: 
+  background-image:
     linear-gradient(180deg, rgba(16, 9, 6, 0.68) 0%, rgba(22, 13, 9, 0.82) 55%, var(--bg-deep) 100%),
     radial-gradient(circle at 50% 30%, rgba(255, 110, 0, 0.18) 0%, transparent 65%),
     url('../Assets/images/special_hero.jpeg');
